@@ -217,6 +217,7 @@ public class EntityHelper {
         entityTable.setEntityClassPKColumns(new LinkedHashSet<EntityColumn>());
         //处理所有列
         List<EntityField> fields = null;
+        // 如果配置启用了方法注解, 则用getAll,反之,用getFields。
         if (config.isEnableMethodAnnotation()) {
             fields = FieldHelper.getAll(entityClass);
         } else {
@@ -227,9 +228,10 @@ public class EntityHelper {
             if(config.isUseSimpleType() && !SimpleTypeUtil.isSimpleType(field.getJavaType())){
                 continue;
             }
+            // 如果是简单类型, 则处理该field
             processField(entityTable, style, field);
         }
-        //当pk.size=0的时候使用所有列作为主键
+        //当pk.size=0的时候使用所有列作为主键 ??? 什么意思 ? why?
         if (entityTable.getEntityClassPKColumns().size() == 0) {
             entityTable.setEntityClassPKColumns(entityTable.getEntityClassColumns());
         }
@@ -245,24 +247,26 @@ public class EntityHelper {
      * @param field
      */
     private static void processField(EntityTable entityTable, Style style, EntityField field) {
-        //排除字段
+        //排除字段(添加@Transient注解的字段,不做处理)
         if (field.isAnnotationPresent(Transient.class)) {
             return;
         }
         //Id
         EntityColumn entityColumn = new EntityColumn(entityTable);
+        // 如果该字段添加了@Id注解
         if (field.isAnnotationPresent(Id.class)) {
             entityColumn.setId(true);
         }
         //Column
         String columnName = null;
+        // 如果该字段添加了@Column注释
         if (field.isAnnotationPresent(Column.class)) {
             Column column = field.getAnnotation(Column.class);
             columnName = column.name();
             entityColumn.setUpdatable(column.updatable());
             entityColumn.setInsertable(column.insertable());
         }
-        //ColumnType
+        // 如果该字段添加了@ColumnType注解
         if (field.isAnnotationPresent(ColumnType.class)) {
             ColumnType columnType = field.getAnnotation(ColumnType.class);
             //column可以起到别名的作用
@@ -277,13 +281,16 @@ public class EntityHelper {
             }
         }
         //表名
+        // 列名
         if (StringUtil.isEmpty(columnName)) {
             columnName = StringUtil.convertByStyle(field.getName(), style);
         }
+        // ??? property就设置为filed的name?
+        // 注意区分property和column
         entityColumn.setProperty(field.getName());
         entityColumn.setColumn(columnName);
         entityColumn.setJavaType(field.getJavaType());
-        //OrderBy
+        // 如果该字段添加了@OrderBy注解
         if (field.isAnnotationPresent(OrderBy.class)) {
             OrderBy orderBy = field.getAnnotation(OrderBy.class);
             if (orderBy.value().equals("")) {
@@ -293,14 +300,17 @@ public class EntityHelper {
             }
         }
         //主键策略 - Oracle序列，MySql自动增长，UUID
+        // 注解@SequenceGenerator
         if (field.isAnnotationPresent(SequenceGenerator.class)) {
             SequenceGenerator sequenceGenerator = field.getAnnotation(SequenceGenerator.class);
             if (sequenceGenerator.sequenceName().equals("")) {
                 throw new MapperException(entityTable.getEntityClass() + "字段" + field.getName() + "的注解@SequenceGenerator未指定sequenceName!");
             }
             entityColumn.setSequenceName(sequenceGenerator.sequenceName());
+            // 注解@GeneratedValue
         } else if (field.isAnnotationPresent(GeneratedValue.class)) {
             GeneratedValue generatedValue = field.getAnnotation(GeneratedValue.class);
+            // generator
             if (generatedValue.generator().equals("UUID")) {
                 entityColumn.setUuid(true);
             } else if (generatedValue.generator().equals("JDBC")) {
@@ -309,6 +319,7 @@ public class EntityHelper {
                 entityTable.setKeyProperties(entityColumn.getProperty());
                 entityTable.setKeyColumns(entityColumn.getColumn());
             } else {
+                // strategy
                 //允许通过generator来设置获取id的sql,例如mysql=CALL IDENTITY(),hsqldb=SELECT SCOPE_IDENTITY()
                 //允许通过拦截器参数设置公共的generator
                 if (generatedValue.strategy() == GenerationType.IDENTITY) {

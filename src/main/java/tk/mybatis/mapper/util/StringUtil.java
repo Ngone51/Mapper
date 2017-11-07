@@ -97,6 +97,7 @@ public class StringUtil {
                 sb.append(c);
             }
         }
+        // 对index为0的判断是基于ColumnFamilySet这种情况,转换下划线风格后: _colunmn_family_set
         return sb.charAt(0) == '_' ? sb.substring(1) : sb.toString();
     }
 
