@@ -272,4 +272,24 @@ public class TestSelectByExample {
         }
     }
 
+    @Test
+    public void testComplex() {
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        try {
+            CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+            Example example = new Example(Country.class);
+            example.or().andEqualTo("id", 1);
+            example.or().andEqualTo("id", 2);
+            example.or().andEqualTo("id", 3);
+            example.and().andEqualTo("id", 4);
+            List<Country> countries = mapper.selectByExample(example);
+            for (Country counrtry : countries) {
+                System.out.println(counrtry.getId());
+            }
+            Assert.assertEquals(3, countries.size());
+        } finally {
+            sqlSession.close();
+        }
+    }
+
 }

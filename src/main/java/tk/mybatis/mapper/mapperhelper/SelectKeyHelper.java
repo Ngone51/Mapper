@@ -59,6 +59,7 @@ public class SelectKeyHelper {
         //defaults
         Configuration configuration = ms.getConfiguration();
         KeyGenerator keyGenerator;
+        //  StringUtil.isEmpty(column.getGenerator())
         String IDENTITY = (column.getGenerator() == null || column.getGenerator().equals("")) ? identity : column.getGenerator();
         if (IDENTITY.equalsIgnoreCase("JDBC")) {
             keyGenerator = new Jdbc3KeyGenerator();
@@ -107,6 +108,7 @@ public class SelectKeyHelper {
             } catch (Exception e) {
                 //ignore
             }
+            // ??? keyStatement == statement
             MappedStatement keyStatement = configuration.getMappedStatement(keyId, false);
             keyGenerator = new SelectKeyGenerator(keyStatement, executeBefore);
             try {
