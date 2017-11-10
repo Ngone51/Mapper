@@ -31,6 +31,8 @@ import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.util.StringUtil;
 
+import javax.persistence.Transient;
+import java.lang.reflect.Field;
 import java.util.*;
 
 /**
@@ -117,6 +119,7 @@ public class Example implements IDynamicTableName {
      * @param properties 属性名的可变参数
      * @return
      */
+    @Deprecated
     public Example excludeProperties(String... properties) {
         if (properties != null && properties.length > 0) {
             if (this.excludeColumns == null) {
@@ -145,6 +148,14 @@ public class Example implements IDynamicTableName {
             for (String property : properties) {
                 if (propertyMap.containsKey(property)) {
                     this.selectColumns.add(propertyMap.get(property).getColumn());
+                } else {
+                    Field[] fields = entityClass.getDeclaredFields();
+                    for (Field field : fields) {
+                        if (field.isAnnotationPresent(Transient.class) && property.equals(field.getName())) {
+                            throw new MapperException("属性 \'" + property + "\' 被 @Transient 注释所修饰，不能作为选择属性");
+                        }
+                    }
+                    throw new MapperException("类 " + entityClass.getSimpleName() + " 不包含属性 \'" + property + "\'");
                 }
             }
         }

@@ -35,10 +35,7 @@ import tk.mybatis.mapper.mapper.MybatisHelper;
 import tk.mybatis.mapper.model.Country;
 import tk.mybatis.mapper.model.Country2;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author liuzh
@@ -273,7 +270,7 @@ public class TestSelectByExample {
     }
 
     @Test
-    public void testComplex() {
+    public void testOrOrOrAnd() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
         try {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
@@ -287,6 +284,47 @@ public class TestSelectByExample {
                 System.out.println(counrtry.getId());
             }
             Assert.assertEquals(3, countries.size());
+        } finally {
+            sqlSession.close();
+        }
+    }
+
+    @Test
+    public void testListValue() {
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        try {
+            CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+            Example example = new Example(Country.class);
+            ArrayList arrayList = new ArrayList();
+            arrayList.add(1);
+            arrayList.add(2);
+            arrayList.add(193);
+            example.createCriteria().andIn("id", arrayList);
+            List<Country> countries = mapper.selectByExample(example);
+            for (Country counrtry : countries) {
+                System.out.println(counrtry.getId());
+            }
+            Assert.assertEquals(5, countries.size());
+        } finally {
+            sqlSession.close();
+        }
+    }
+
+    @Test
+    public void testSelectPropertis() {
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        try {
+            CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+            Example example = new Example(Country.class);
+            example.createCriteria().andEqualTo("id", 1);
+//            example.selectProperties(new String[]{"id", "code", "countryname"});
+            example.selectProperties(new String[]{"countryname", "dynamicTableName123"});
+            example.excludeProperties(new String[]{"countryname"});
+            List<Country> countries = mapper.selectByExample(example);
+            for (Country counrtry : countries) {
+                System.out.println(counrtry.getId() + " " + counrtry.getCountryname() + " " + counrtry.getCountrycode());
+            }
+            Assert.assertEquals(1, countries.size());
         } finally {
             sqlSession.close();
         }

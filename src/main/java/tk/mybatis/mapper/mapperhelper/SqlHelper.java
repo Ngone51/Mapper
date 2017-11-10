@@ -619,7 +619,7 @@ public class SqlHelper {
                 "        <foreach collection=\"criteria.criteria\" item=\"criterion\">\n" +
                 "          <choose>\n" +
                 "            <when test=\"criterion.noValue\">\n" +
-                "              ${@tk.mybatis.mapper.util.OGNL@andOr(criterion)} ${criterion.condition}\n" +
+                "              ${@tk.mybatis.mapper.util.OGNL@andOr()criterion} ${criterion.condition}\n" +
                 "            </when>\n" +
                 "            <when test=\"criterion.singleValue\">\n" +
                 "              ${@tk.mybatis.mapper.util.OGNL@andOr(criterion)} ${criterion.condition} #{criterion.value}\n" +
