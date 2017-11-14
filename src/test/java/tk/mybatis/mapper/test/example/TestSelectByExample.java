@@ -330,4 +330,23 @@ public class TestSelectByExample {
         }
     }
 
+    @Test
+    public void testDistinct() {
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        try {
+            CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+            Example example = new Example(Country.class);
+            example.createCriteria().andEqualTo("countryname", "Zambia");
+            example.setDistinct(true);
+            example.selectProperties("countryname", "countrycode");
+            List<Country> countries = mapper.selectByExample(example);
+            for (Country counrtry : countries) {
+                System.out.println(counrtry.getId() + " " + counrtry.getCountryname() + " " + counrtry.getCountrycode());
+            }
+            Assert.assertEquals(2, countries.size());
+        } finally {
+            sqlSession.close();
+        }
+    }
+
 }

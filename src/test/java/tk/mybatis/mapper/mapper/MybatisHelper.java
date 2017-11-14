@@ -99,12 +99,12 @@ public class MybatisHelper {
                 mapperHelper.processConfiguration(session.getConfiguration());
                 //OK - mapperHelper的任务已经完成，可以不管了
 
-                Connection conn = session.getConnection();
-                reader = Resources.getResourceAsReader("CreateDB.sql");
-                ScriptRunner runner = new ScriptRunner(conn);
-                runner.setLogWriter(null);
-                runner.runScript(reader);
-                reader.close();
+//                Connection conn = session.getConnection();
+//                reader = Resources.getResourceAsReader("CreateDB.sql");
+//                ScriptRunner runner = new ScriptRunner(conn);
+//                runner.setLogWriter(null);
+//                runner.runScript(reader);
+//                reader.close();
             } finally {
                 if (session != null) {
                     session.close();
