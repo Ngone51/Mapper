@@ -20,7 +20,8 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- */
+ *//*
+
 
 package tk.mybatis.mapper.test.country;
 
@@ -31,16 +32,20 @@ import tk.mybatis.mapper.mapper.CountryMapper;
 import tk.mybatis.mapper.mapper.MybatisHelper;
 import tk.mybatis.mapper.model.Country;
 
+*/
 /**
  * 通过PK更新实体类非null属性
  *
  * @author liuzh
- */
+ *//*
+
 public class TestUpdateByPrimaryKeySelective {
 
-    /**
+    */
+/**
      * set属性为0,导致异常
-     */
+     *//*
+
     @Test(expected = Exception.class)
     //TODO 测试手写的是否存在这个问题
     public void testDynamicUpdateByPrimaryKeySelectiveAll() {
@@ -53,9 +58,11 @@ public class TestUpdateByPrimaryKeySelective {
         }
     }
 
-    /**
+    */
+/**
      * 除了通过主键的方法，其他的方法入参不能为null
-     */
+     *//*
+
     @Test(expected = RuntimeException.class)
     public void testDynamicUpdateByPrimaryKeySelectiveAllByNull() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
@@ -67,9 +74,11 @@ public class TestUpdateByPrimaryKeySelective {
         }
     }
 
-    /**
+    */
+/**
      * 根据查询条件进行查询
-     */
+     *//*
+
     @Test
     public void testDynamicUpdateByPrimaryKeySelective() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
@@ -91,9 +100,11 @@ public class TestUpdateByPrimaryKeySelective {
         }
     }
 
-    /**
+    */
+/**
      * 继承类可以使用,但多出来的属性无效
-     */
+     *//*
+
     @Test
     public void testDynamicUpdateByPrimaryKeySelectiveNotFoundKeyProperties() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
@@ -122,3 +133,4 @@ public class TestUpdateByPrimaryKeySelective {
     }
 
 }
+*/

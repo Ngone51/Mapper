@@ -27,6 +27,7 @@ package tk.mybatis.mapper.model;
 import org.apache.ibatis.type.JdbcType;
 import tk.mybatis.mapper.annotation.ColumnType;
 import tk.mybatis.mapper.entity.IDynamicTableName;
+import tk.mybatis.mapper.typehandler.CountryCodeTypeHandler;
 import tk.mybatis.mapper.typehandler.StringType2Handler;
 
 import javax.persistence.Column;
@@ -41,10 +42,13 @@ import java.util.List;
  */
 public class Country extends Entity<Integer, String> implements Serializable, IDynamicTableName {
     private static final long serialVersionUID = -1626761012846137805L;
+    @Transient
     List<Country> list;
     @Column
-    @ColumnType(jdbcType = JdbcType.VARCHAR, typeHandler = StringType2Handler.class)
-    private String countryname;
+//    @ColumnType(jdbcType = JdbcType.VARCHAR, typeHandler = StringType2Handler.class)
+    @ColumnType(typeHandler = CountryCodeTypeHandler.class)
+    private Pinyin2Countryname countryname;
+//    private String countryname;
     private String countrycode;
     @Transient
     private String dynamicTableName123;
@@ -57,13 +61,20 @@ public class Country extends Entity<Integer, String> implements Serializable, ID
         this.countrycode = countrycode;
     }
 
-    public String getCountryname() {
+    public Pinyin2Countryname getCountryname() {
         return countryname;
     }
 
-    public void setCountryname(String countryname) {
+    public void setCountryname(Pinyin2Countryname countryname) {
         this.countryname = countryname;
     }
+//    public String getCountryname() {
+//        return countryname;
+//    }
+
+//    public void setCountryname(String countryname) {
+//        this.countryname = countryname;
+//    }
 
     @Override
     @Transient

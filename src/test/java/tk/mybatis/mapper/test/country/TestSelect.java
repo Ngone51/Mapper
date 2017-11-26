@@ -30,6 +30,7 @@ import org.junit.Test;
 import tk.mybatis.mapper.mapper.CountryMapper;
 import tk.mybatis.mapper.mapper.MybatisHelper;
 import tk.mybatis.mapper.model.Country;
+import tk.mybatis.mapper.model.Pinyin2Countryname;
 
 import java.util.List;
 
@@ -98,7 +99,7 @@ public class TestSelect {
             //35,'China','CN'
             country.setCountrycode("CN");
             country.setId(35);
-            country.setCountryname("China");
+//            country.setCountryname("China");
             List<Country> countryList = mapper.select(country);
             Assert.assertEquals(1, countryList.size());
         } finally {
@@ -150,7 +151,7 @@ public class TestSelect {
             CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
             Country country = new Country();
             country.setCountrycode("CN");
-            country.setCountryname("天朝");//实际上是 China
+//            country.setCountryname("天朝");//实际上是 China
             List<Country> countryList = mapper.select(country);
 
             Assert.assertEquals(0, countryList.size());
@@ -191,4 +192,21 @@ public class TestSelect {
         }
     }
 
+
+    @Test
+    public void testEnumWithTypeHandler() {
+        SqlSession sqlSession = MybatisHelper.getSqlSession();
+        try {
+            CountryMapper mapper = sqlSession.getMapper(CountryMapper.class);
+            Country country = new Country();
+            country.setCountryname(Pinyin2Countryname.valueOf("ZhongGuo"));
+            List<Country> countries = mapper.select(country);
+            //根据主键删
+            Assert.assertEquals("China", countries.get(0).getCountryname().getName());
+            Assert.assertEquals("CN", countries.get(0).getCountrycode());
+
+        } finally {
+            sqlSession.close();
+        }
+    }
 }

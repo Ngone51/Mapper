@@ -20,7 +20,8 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- */
+ *//*
+
 
 package tk.mybatis.mapper.test.country;
 
@@ -32,16 +33,20 @@ import tk.mybatis.mapper.mapper.CountryMapper;
 import tk.mybatis.mapper.mapper.MybatisHelper;
 import tk.mybatis.mapper.model.Country;
 
+*/
 /**
  * 通过实体类属性进行查询
  *
  * @author liuzh
- */
+ *//*
+
 public class TestSelectOne {
 
-    /**
+    */
+/**
      * 查询全部
-     */
+     *//*
+
     @Test(expected = TooManyResultsException.class)
     public void testDynamicSelectAll() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
@@ -53,9 +58,11 @@ public class TestSelectOne {
         }
     }
 
-    /**
+    */
+/**
      * 入参为null时查询全部
-     */
+     *//*
+
     @Test(expected = TooManyResultsException.class)
     public void testDynamicSelectAllByNull() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
@@ -67,9 +74,11 @@ public class TestSelectOne {
         }
     }
 
-    /**
+    */
+/**
      * 根据查询条件进行查询
-     */
+     *//*
+
     @Test
     public void testDynamicSelect() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
@@ -86,9 +95,11 @@ public class TestSelectOne {
         }
     }
 
-    /**
+    */
+/**
      * 查询不存在的结果
-     */
+     *//*
+
     @Test
     public void testDynamicSelectZero() {
         SqlSession sqlSession = MybatisHelper.getSqlSession();
@@ -106,3 +117,4 @@ public class TestSelectOne {
     }
 
 }
+*/
